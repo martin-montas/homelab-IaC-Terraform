@@ -18,15 +18,23 @@ provider "proxmox" {
 }
 
 resource "proxmox_vm_qemu" "your-vm" {
-  
+
+
+
+ 
   # -- General settings
 
-  name = "vm-name"
+  name = "test-vm"
   desc = "just a test"
   agent = 1  # <-- (Optional) Enable QEMU Guest Agent
   target_node = "pve"  # <-- Change to the name of your Proxmox node (if you have multiple nodes)
   tags = "test"
   vmid = "100"
+
+  # -- static ip settings
+
+  os_type     = "cloud-init"
+  ipconfig0   = "ip=10.0.0.5/24,gw=10.0.0.1"  # Set static IP and gateway
 
   # -- Template settings
 
