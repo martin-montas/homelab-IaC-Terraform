@@ -19,10 +19,7 @@ provider "proxmox" {
 
 resource "proxmox_vm_qemu" "your-vm" {
 
-
-
- 
-  # -- General settings
+# -- General settings
 
   name = "test-vm"
   desc = "just a test"
