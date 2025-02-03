@@ -2,8 +2,14 @@
   hosts: all
   become: true
   tasks:
-    - name:  Install Pihole
+    - name:  Makes sure Curl is install
       pacman:
-        name: nginx
+        name: curl
         state: present
+
+    - name: Install Pihole on the command line
+      shell: curl -sSL https://install.pi-hole.net | bash
+
+
+
 

@@ -53,7 +53,7 @@ resource "proxmox_vm_qemu" "your-vm" {
 
 resource "null_resource" "run_ansible" {
   provisioner "local-exec" {
-    command = "ansible-playbook -i inventory.ini pihole.yml"
+    command = "ansible-playbook -i inventory.ini pihole.yml > output.txt"
   }
   depends_on = [proxmox_vm_qemu.your-vm]
 }
