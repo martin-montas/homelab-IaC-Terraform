@@ -18,7 +18,6 @@ provider "proxmox" {
 }
 
 resource "proxmox_vm_qemu" "your-vm" {
-
   name        = "test-vm"
   agent       = 1  
   target_node = "pve"
