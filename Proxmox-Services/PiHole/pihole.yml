@@ -1,0 +1,9 @@
+- name: Configure Pihole a Proxmox VM
+  hosts: all
+  become: true
+  tasks:
+    - name:  Install Pihole
+      pacman:
+        name: nginx
+        state: present
+
