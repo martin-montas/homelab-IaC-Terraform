@@ -8,4 +8,4 @@
         state: present
 
     - name: Install Pihole on the command line
-      shell: curl -sSL https://install.pi-hole.net | bash
+      shell: curl -sSL https://install.pi-hole.net | bash | tee install.log

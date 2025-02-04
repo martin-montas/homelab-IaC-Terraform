@@ -8,6 +8,10 @@ variable "api_token" {
   type        = string
 }
 
+variable "target_node" {
+  description = "the Node inside the terraform machine no the actual VM"
+  type        = string
+}
 
 variable "node_name" {
   description = "Name of the virtual machine"

@@ -1,4 +1,3 @@
-# TODO (The whole thing)
 terraform {
   required_version = ">= 0.13.0"
 
@@ -18,10 +17,12 @@ provider "proxmox" {
 }
 
 resource "proxmox_vm_qemu" "your-vm" {
-  name        = "Pihole"
+
+  name        = "test-vm"
   agent       = 1  
   target_node = "pve"
   tags        = "test"
+  vmid        = 100
 
   # Static IP
   os_type   = "cloud-init"
@@ -36,7 +37,7 @@ resource "proxmox_vm_qemu" "your-vm" {
   startup = ""
 
   # Hardware
-  bios          = "seabios"
+  bios          = "seabios"  # Change to "ovmf" if UEFI is required
   cores         = 2
   sockets       = 1
   cpu_type      = "host"
@@ -49,11 +50,4 @@ resource "proxmox_vm_qemu" "your-vm" {
     bridge = "vmbr0"
     model  = "virtio"
   }
-}
-
-resource "null_resource" "run_ansible" {
-  provisioner "local-exec" {
-    command = "ansible-playbook -i inventory.ini pihole.yml > output.txt"
-  }
-  depends_on = [proxmox_vm_qemu.your-vm]
 }
