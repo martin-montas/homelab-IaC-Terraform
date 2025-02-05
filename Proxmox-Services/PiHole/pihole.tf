@@ -44,6 +44,14 @@ resource "proxmox_vm_qemu" "your-vm" {
   memory  = 2048
   balloon = 2048
 
+    disk {
+        storage     = "local-lvm"
+        type        = "disk"
+        size        = "20G"
+        slot        = "scsi0"
+        iothread    = true
+    }
+
   # Network
   network {
     id     = 0
