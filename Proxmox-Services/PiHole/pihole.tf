@@ -1,61 +1,46 @@
 terraform {
-  required_version = ">= 0.13.0"
-
-  required_providers {
-    proxmox = {
-      source  = "telmate/proxmox"
-      version = "3.0.1-rc6"
+    required_version = ">= 0.13.0"
+    required_providers {
+        proxmox = {
+            source  = "telmate/proxmox"
+            version = "3.0.1-rc6"
+        }
     }
-  }
 }
 
 provider "proxmox" {
-  pm_api_url          = var.endpoint
-  pm_api_token_id     = var.api_token
-  pm_api_token_secret = var.secret
-  pm_tls_insecure     = true
+    pm_api_url          = var.endpoint
+    pm_api_token_id     = var.api_token
+    pm_api_token_secret = var.secret
+    pm_tls_insecure     = true
 }
 
-resource "proxmox_vm_qemu" "your-vm" {
-
-  name        = "test-vm"
-  agent       = 1  
-  target_node = "pve"
-  tags        = "test"
-  vmid        = 100
-
-  # Static IP
-  os_type   = "cloud-init"
-  ipconfig0 = "ip=10.0.0.5/24,gw=10.0.0.1"
-
-  # Template cloning
-  clone      = "ubuntu-22.04"
-  full_clone = true
-
-  # Boot Settings
-  onboot  = true
-  startup = ""
-
-  # Hardware
-  bios          = "seabios"  # Change to "ovmf" if UEFI is required
-  cores         = 2
-  sockets       = 1
-  cpu_type      = "host"
-  memory  = 2048
-  balloon = 2048
-
-    disk {
-        storage     = "local-lvm"
-        type        = "disk"
-        size        = "20G"
-        slot        = "scsi0"
-        iothread    = true
+resource "proxmox_lxc" "your-vm" {
+    hostname        = "Pihole-CT-test"
+    target_node     = "pve" 
+    vmid            = 104
+    tags            = "test"
+    unprivileged    = true
+    start           = true
+    cores           = 2
+    memory          = 1024
+    password        = var.password
+    swap            = 512
+    ostemplate      = "local:vztmpl/debian-12-standard_12.7-1_amd64.tar.zst"
+    rootfs {
+        storage     = "local-lvm" # Change to your Proxmox storage
+        size        = "8G"
     }
-
-  # Network
-  network {
-    id     = 0
-    bridge = "vmbr0"
-    model  = "virtio"
+    network {
+        name        = "eth0"
+        bridge      = "vmbr0"
+        ip          = "dhcp" # Or use "192.168.1.100/24" for a static IP
+    }
+    mountpoint {
+    slot            = 0             # Required slot index (mp0, mp1, etc.)
+    key             = "mp0"
+    storage         = "local-lvm"       # Adjust this to your Proxmox storage
+    mp              = "/mnt/shared" # Path inside the container
+    size            = "10G"
   }
 }

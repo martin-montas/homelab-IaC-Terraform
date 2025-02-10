@@ -21,3 +21,8 @@ variable "secret" {
   description = "Name of the virtual machine"
   type        = string
 }
+
+variable "password" {
+  description = "the container password"
+  type        = string
+}
