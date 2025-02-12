@@ -26,3 +26,10 @@ variable "password" {
   description = "the container password"
   type        = string
 }
+
+
+variable "proxmox_host" {
+  description = "just the ip of the proxmox host"
+  type        = string
+}
+
