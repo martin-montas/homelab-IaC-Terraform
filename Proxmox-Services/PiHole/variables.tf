@@ -1,3 +1,4 @@
+
 variable "endpoint" {
   description = "Proxmox API URL"
   type        = string
@@ -32,4 +33,3 @@ variable "proxmox_host" {
   description = "just the ip of the proxmox host"
   type        = string
 }
-

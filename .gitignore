@@ -4,3 +4,4 @@ inventory.ini
 .terraform.lock.hcl
 *.tfstate
 *.tfstate.backup
+pihole3/

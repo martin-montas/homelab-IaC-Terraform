@@ -36,33 +36,8 @@ resource "proxmox_lxc" "pihole_container" {
   network {
     name   = "eth0"
     bridge = "vmbr0"
-    ip     = "dhcp"  # DHCP assigned IP
-  }
-
-  mountpoint {
-    slot    = 0
-    storage = "local-lvm"
-    mp      = "/mnt/shared" # Correct path inside the container
-    size    = "10G"
+    ip     = "10.0.0.5/24"
+    gw     =  "10.0.0.1"
   }
 }
 
-resource "null_resource" "get_ip_and_run_ansible" {
-  depends_on = [proxmox_lxc.pihole_container]
-
-  provisioner "local-exec" {
-    command = <<EOT
-      sleep 10  # Wait for Proxmox to assign the IP
-      CONTAINER_ID=$(curl -s -k --header "Authorization: PVEAPIToken=${var.api_token}" \
-        "https://${var.proxmox_host}:8006/api2/json/nodes/${var.target_node}/lxc" | jq -r '.data[] | select(.name=="Pihole-CT-test") | .vmid')
-
-      CONTAINER_IP=$(curl -s -k --header "Authorization: PVEAPIToken=${var.api_token}" \
-        "https://${var.proxmox_host}:8006/api2/json/nodes/${var.target_node}/lxc/$CONTAINER_ID/config" | jq -r '.data.ip_address')
-
-      echo "[proxmox]" > inventory.ini
-      echo "$CONTAINER_IP ansible_user=root ansible_password=${var.password} ansible_ssh_common_args='-o StrictHostKeyChecking=no'" >> inventory.ini
-
-      ansible-playbook -i inventory.ini pihole.yml
-    EOT
-  }
-}
