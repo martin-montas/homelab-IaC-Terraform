@@ -40,4 +40,3 @@ resource "proxmox_lxc" "pihole_container" {
     gw     =  "10.0.0.1"
   }
 }
-
