@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Exit on errors
-set -e  
+# set -e  
 
 # Check if the script is running as root
 if [[ $EUID -ne 0 ]]; then
